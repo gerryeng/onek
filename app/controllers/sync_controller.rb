@@ -20,8 +20,12 @@ class SyncController < ApplicationController
 
 	def load_session
 		if params[:uid]
-			@player = Player.find(params[:uid])
-			@game = @player.game
+			@player = Player.where(id: params[:uid]).first
+			if @player
+				@game = @player.game
+			else
+				render json: {error: 'Sending invalid player id'} and return
+			end
 		else
 			@player = Player.create
 			@player.update_attribute('name', Faker::Name.name)

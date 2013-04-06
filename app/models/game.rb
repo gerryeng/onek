@@ -15,7 +15,7 @@ class Game < ActiveRecord::Base
 
   def status_hash
   	{
-  		status: status,
+  		type: status,
   		body: status_message
   	}
   end
@@ -48,8 +48,12 @@ class Game < ActiveRecord::Base
     players.count >= 2
   end
 
-  def start
-    update_attribute('status', )
+  def start_game
+    # Let random player start the game
+    player = players.sample
+    update_attribute('status', 'AWAIT_PLAYER')
+    update_attribute('status_message', "{user_id: #{player.id}, message: '#{player.name}'s' turn to play card'}")
+    Rails.logger.info "Starting game: #{id}"
   end
 
   def self.find_available_game_or_create(player)
@@ -63,15 +67,17 @@ class Game < ActiveRecord::Base
 
     if game.nil?
       game = Game.setup_new_game(player)
+      player.update_attribute('game_id', game.id)
     else
+      # Player have joined an existing game
       # If the game has enough players, set the status to start
+      Rails.logger.info "Joined the game: #{game.id}"
+      player.update_attribute('game_id', game.id)
       if game.have_enough_players?
-        game.start
+        game.start_game
       end
     end
-
-    # Assign player to game
-    player.update_attribute('game_id', game.id)
+  
 
     # Draw 5 cards for the player
     player.draw_cards(5)
