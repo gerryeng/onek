@@ -9,7 +9,7 @@ class ApiController < ApplicationController
 				user_id: '123'
 			}
 		}
-		render :json => sync_json
+		render json: sync_json
 	end
 
 end
