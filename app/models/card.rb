@@ -16,7 +16,11 @@ class Card < ActiveRecord::Base
   def self.cards_to_array(cards)
     card_array = []
     cards.each do |card|
-      card_array << card.hash
+      if card.nil?
+        card_array << nil
+      else
+        card_array << card.hash
+      end
     end
 
     card_array

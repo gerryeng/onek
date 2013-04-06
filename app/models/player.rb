@@ -65,7 +65,16 @@ class Player < ActiveRecord::Base
   end
 
   def hand_card_objects
-    Card.where(id: hand_card_ids)
+    objects = []
+    hand_card_ids.each do |id|
+      if id.nil?
+        objects << nil
+      else
+        objects << Card.where(id: id).first
+      end
+    end
+
+    objects
   end
 
   def update_hand_cards(card_ids = [])
@@ -94,7 +103,16 @@ class Player < ActiveRecord::Base
   end
 
   def table_card_objects
-    Card.where(id: table_card_ids)
+    objects = []
+    table_card_ids.each do |id|
+      if id.nil?
+        objects << nil
+      else
+        objects << Card.where(id: id).first
+      end
+    end
+
+    objects
   end
 
   def is_card_in_hand?(card_id)
@@ -120,7 +138,8 @@ class Player < ActiveRecord::Base
 
   def remove_card_from_hand(card_id)
     ids = hand_card_ids
-    ids.delete(card_id)
+    index = ids.index(card_id)
+    ids[index] = nil
     update_hand_cards(ids)
   end
 
