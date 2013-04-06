@@ -5,7 +5,7 @@ class Message < ActiveRecord::Base
 
   def hash
   	{
-  		timestamp: created_at.to_i
+  		timestamp: created_at.to_i,
   		message: message
   	}
   end

@@ -34,7 +34,22 @@ class SyncController < ApplicationController
 			@player = Player.find(params[:user_id])
 			@game = @player.game
 		else
-			
+			@player = Player.new name: "Player #{Random.rand.to_i}"
+
+			# Find a game that is available
+			@game = nil
+			Game.all.each do |g|
+				if g.players.count < 2
+					@game = g
+					break
+				end
+			end
+
+			if @game.nil?
+				@game = Game.create 
+			end
+
+			@player.game_id = @game.id
 		end
 	end
 end
