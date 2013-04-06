@@ -4,7 +4,6 @@ gem 'rails', '3.2.11'
 
 gem 'pg'
 gem 'thin'
-gem 'sqlite3'
 
 group :assets do
 	gem 'sass-rails',   '~> 3.2.3'
@@ -26,6 +25,7 @@ group :development do
 	gem 'rack-mini-profiler'
 	gem 'guard-livereload'
 	gem 'rb-fsevent', '~> 0.9'
+	gem 'sqlite3'
 end
 
 gem 'jquery-rails'
