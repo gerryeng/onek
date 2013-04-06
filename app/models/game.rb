@@ -16,7 +16,7 @@ class Game < ActiveRecord::Base
   def status_hash
   	{
   		type: status,
-  		body: status_message
+  		body: eval(status_message)
   	}
   end
 
@@ -52,7 +52,7 @@ class Game < ActiveRecord::Base
     # Let random player start the game
     player = players.sample
     update_attribute('status', 'AWAIT_PLAYER')
-    update_attribute('status_message', "{user_id: #{player.id}, message: '#{player.name}'s' turn to play card'}")
+    update_attribute('status_message', "{user_id: #{player.id}, message: \"#{player.name}\'s turn to play card\"}")
     Rails.logger.info "Starting game: #{id}"
   end
 
