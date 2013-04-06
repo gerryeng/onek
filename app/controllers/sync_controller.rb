@@ -1,17 +1,6 @@
 class SyncController < ApplicationController
 	before_filter :load_session
 
-	def sync_dummy
-		sync_json = {
-			players: 'a',
-			whos_s_turn: 'a',
-			user_id: 'a',
-			messages: 'a',
-			status: 'a'
-		}
-		render json: sync_json
-	end
-
 	def sync
 		# Read Game state
 
@@ -30,8 +19,8 @@ class SyncController < ApplicationController
 	private
 
 	def load_session
-		if params[:user_id]
-			@player = Player.find(params[:user_id])
+		if params[:uid]
+			@player = Player.find(params[:uid])
 			@game = @player.game
 		else
 			@player = Player.create
