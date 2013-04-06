@@ -13,6 +13,23 @@ class Card < ActiveRecord::Base
     }
   end
 
+  def self.cards_to_array(cards)
+    card_array = []
+    cards.each do |card|
+      card_array << card.hash
+    end
+
+    card_array
+  end
+
+  def is_thing?
+    card_type == 'THING'
+  end
+
+  def is_action?
+      card_type == 'ACTION'
+  end
+
   def self.create_effects
   	effects = [
 	  	{

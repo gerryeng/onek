@@ -2,9 +2,7 @@ class SyncController < ApplicationController
 	before_filter :load_session
 
 	def sync
-		# Read Game state
-
-		# If no user is specified, create a new user session
+		info "Returning info hash"
 		sync_json = {
 			game_id: @game.id,
 			players: @game.players_hash,
@@ -24,7 +22,7 @@ class SyncController < ApplicationController
 			if @player
 				@game = @player.game
 			else
-				render json: {error: 'Sending invalid player id'} and return
+				failed 'Sending invalid player id'
 			end
 		else
 			@player = Player.create
@@ -32,7 +30,6 @@ class SyncController < ApplicationController
 
 			# Find a game that is available
 			@game = Game.find_available_game_or_create(@player)
-			
 		end
 	end
 end

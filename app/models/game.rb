@@ -53,6 +53,7 @@ class Game < ActiveRecord::Base
     player = players.sample
     update_attribute('status', 'AWAIT_PLAYER')
     update_attribute('status_message', "{user_id: #{player.id}, message: \"#{player.name}\'s turn to play card\"}")
+    update_attribute('turn', player.id)
     Rails.logger.info "Starting game: #{id}"
   end
 
@@ -78,7 +79,6 @@ class Game < ActiveRecord::Base
       end
     end
   
-
     # Draw 5 cards for the player
     player.draw_cards(5)
     
