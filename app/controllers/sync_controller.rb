@@ -1,3 +1,0 @@
-class SyncController < ApplicationController
-
-end
