@@ -18,6 +18,7 @@ gem 'jquery-rails'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'twitter-bootstrap-rails'
+gem 'faker'
 
 group :development do 
 	gem 'debugger'

@@ -54,6 +54,8 @@ GEM
     eventmachine (1.0.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    faker (1.1.2)
+      i18n (~> 0.5)
     formatador (0.2.4)
     guard (1.7.0)
       formatador (>= 0.2.4)
@@ -172,6 +174,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   debugger
+  faker
   guard-livereload
   haml-rails
   jquery-rails

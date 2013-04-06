@@ -31,7 +31,17 @@ class Game < ActiveRecord::Base
   def self.setup_new_game(player)
     g = Game.create(status: 'AWAIT_PLAYER', status_message: 'Waiting for another player to join')
     g.update_attribute('turn', player.id)
+    g.update_attribute('deck_pile', Card.all.map(&:id).shuffle.join(","))
+    g.update_attribute('discard_pile', "")
     g
+  end
+
+  def draw_cards(number_of_cards)
+    card_ids = deck_pile.split(",")
+    cards_drawn = card_ids.pop(number_of_cards)
+    update_attribute('deck_pile', card_ids.join(","))
+
+    cards_drawn
   end
 
   def self.find_available_game_or_create(player)
@@ -48,6 +58,9 @@ class Game < ActiveRecord::Base
 
     # Assign player to game
     player.update_attribute('game_id', game.id)
+
+    # Draw 5 cards for the player
+    player.draw_cards(5)
     
     game
   end

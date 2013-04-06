@@ -35,7 +35,7 @@ class SyncController < ApplicationController
 			@game = @player.game
 		else
 			@player = Player.create
-			@player.update_attribute('name', "Player #{@player.id}")
+			@player.update_attribute('name', Faker::Name.name)
 
 			# Find a game that is available
 			@game = Game.find_available_game_or_create(@player)

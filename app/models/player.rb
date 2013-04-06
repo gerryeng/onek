@@ -21,4 +21,12 @@ class Player < ActiveRecord::Base
     update_attribute('table_cards', '') if table_cards.nil?
   	table_cards.split(",")
   end
+
+  def draw_cards(number_of_cards)
+    # Get cards from the deck pile for the user
+    cards = game.draw_cards(number_of_cards)
+    update_attribute('hand_cards', cards.join(','))
+
+    cards
+  end
 end
