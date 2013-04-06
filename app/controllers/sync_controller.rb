@@ -16,8 +16,8 @@ class SyncController < ApplicationController
 		# Read Game state
 
 		# If no user is specified, create a new user session
-
 		sync_json = {
+			game_id: @game.id,
 			players: @game.players_hash,
 			whos_s_turn: @game.turn,
 			user_id: @player.id,
@@ -34,22 +34,12 @@ class SyncController < ApplicationController
 			@player = Player.find(params[:user_id])
 			@game = @player.game
 		else
-			@player = Player.new name: "Player #{Random.rand.to_i}"
+			@player = Player.create
+			@player.update_attribute('name', "Player #{@player.id}")
 
 			# Find a game that is available
-			@game = nil
-			Game.all.each do |g|
-				if g.players.count < 2
-					@game = g
-					break
-				end
-			end
-
-			if @game.nil?
-				@game = Game.create 
-			end
-
-			@player.game_id = @game.id
+			@game = Game.find_available_game_or_create(@player)
+			
 		end
 	end
 end
