@@ -14,7 +14,13 @@ class Player < ActiveRecord::Base
 
   def hand_cards_array
     update_attribute('hand_cards', '') if hand_cards.nil?
-  	hand_cards.split(",")
+  	cards = Card.where(id: hand_cards.split(","))
+    card_array = []
+    cards.each do |card|
+      card_array << card.hash
+    end
+
+    card_array
   end
 
   def table_cards_array

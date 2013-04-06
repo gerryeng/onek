@@ -29,7 +29,7 @@ class Game < ActiveRecord::Base
   end
 
   def self.setup_new_game(player)
-    g = Game.create(status: 'AWAIT_PLAYER', status_message: 'Waiting for another player to join')
+    g = Game.create(status: 'AWAIT_PLAYER', status_message: "{message: 'Waiting for another player to join'}")
     g.update_attribute('turn', player.id)
     g.update_attribute('deck_pile', Card.all.map(&:id).shuffle.join(","))
     g.update_attribute('discard_pile', "")
@@ -44,16 +44,30 @@ class Game < ActiveRecord::Base
     cards_drawn
   end
 
+  def have_enough_players?
+    players.count >= 2
+  end
+
+  def start
+    update_attribute('status')
+  end
+
   def self.find_available_game_or_create(player)
     game = nil
     Game.all.each do |g|
       if g.players.count < 2
         game = g
+        break
       end
     end
 
     if game.nil?
       game = Game.setup_new_game(player)
+    else
+      # If the game has enough players, set the status to start
+      if game.have_enough_players?
+        game.start
+      end
     end
 
     # Assign player to game

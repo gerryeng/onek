@@ -3,6 +3,16 @@ class Card < ActiveRecord::Base
 
   has_and_belongs_to_many :effects
 
+  def hash
+    {
+        id: id,
+        type: card_type,
+        name: name,
+        description: description,
+        image_url: image_url
+    }
+  end
+
   def self.create_effects
   	effects = [
 	  	{
