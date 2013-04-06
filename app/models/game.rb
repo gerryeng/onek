@@ -21,19 +21,49 @@ class Game < ActiveRecord::Base
   end
 
   def messages_hash
-  	h = {}
+  	h = []
   	messages.each do |m|
   		h << m.hash
   	end
   	h
   end
 
-  def self.setup_new_game(player)
-    g = Game.create(status: 'AWAIT_JOIN', status_message: "{message: 'Waiting for another player to join'}")
-    g.update_attribute('turn', player.id)
-    g.update_attribute('deck_pile', Card.all.map(&:id).shuffle.join(","))
-    g.update_attribute('discard_pile', "")
-    g
+
+  ###############
+  # Card Effects
+  ###############
+
+  def apply_card_effects(card_player, card)
+    msg "#{card_player} played the #{card} card"
+    card.effects.each do |effect|
+      apply_effect(card_player, effect)
+    end
+  end
+
+  def apply_effect(card_player, effect)
+    if effect.effect_type == 'DISCARD'
+      msg "#{card_player}: Card has a discard effect. Will discard one card from opponent's hand"
+      discard_opponent_cards(card_player, 1)
+    elsif effect.effect_type == 'DESTROY'
+      msg "#{card_player}: Card has a destroy effect. Will destroy one card from opponent's table"
+      destroy_opponent_cards(card_player, 1)
+    end
+  end
+
+  def discard_opponent_cards(card_player, quantity)
+    opponents_of(card_player).each do |opponent_player|
+      opponent_player.discard_random_cards(quantity)
+    end
+  end
+
+  def destroy_opponent_cards(card_player, quantity)
+    opponents_of(card_player).each do |opponent_player|
+      opponent_player.destroy_random_cards(quantity)
+    end
+  end
+
+  def opponents_of(player)
+    players.select { |p| p.id != player }
   end
 
   def draw_cards(number_of_cards)
@@ -42,6 +72,18 @@ class Game < ActiveRecord::Base
     update_attribute('deck_pile', card_ids.join(","))
 
     cards_drawn
+  end
+  ###############
+  # Game setup
+  ###############
+
+  def self.setup_new_game(player)
+    g = Game.create(status: 'AWAIT_JOIN', status_message: "{user_id: #{player.id}}")
+    g.msg 'Waiting for another player to join'
+    g.update_attribute('turn', player.id)
+    g.update_attribute('deck_pile', Card.all.map(&:id).shuffle.join(","))
+    g.update_attribute('discard_pile', "")
+    g
   end
 
   def have_enough_players?
@@ -52,8 +94,9 @@ class Game < ActiveRecord::Base
     # Let random player start the game
     player = players.sample
     update_attribute('status', 'AWAIT_PLAYER')
-    update_attribute('status_message', "{user_id: #{player.id}, message: \"#{player.name}\'s turn to play card\"}")
+    update_attribute('status_message', "{user_id: #{player.id}}")
     update_attribute('turn', player.id)
+    msg "#{player.name}\'s turn to play card\""
     Rails.logger.info "Starting game: #{id}"
   end
 
@@ -83,5 +126,20 @@ class Game < ActiveRecord::Base
     player.draw_cards(5)
     
     game
+  end
+
+  def clear_messages
+    messages.each do |message|
+      message.destroy
+    end
+  end
+
+  def msg(message)
+    messages.create message: message
+    info message
+  end
+
+  def info(message)
+    Rails.logger.info message
   end
 end

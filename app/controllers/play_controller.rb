@@ -7,7 +7,9 @@ class PlayController < ApplicationController
 		if @card.is_thing?
 			# Place the card on the table
 			@player.place_card_on_table_from_hand(@card.id)
-			# Apply card effect
+
+			@game.apply_card_effects(@player, @card)
+
 			render json: {status: 'SUCCESS'}
 		else
 			render json: {ok: 'is action'}

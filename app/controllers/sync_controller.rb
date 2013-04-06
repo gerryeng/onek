@@ -11,6 +11,7 @@ class SyncController < ApplicationController
 			messages: @game.messages_hash,
 			status: @game.status_hash
 		}
+		@game.clear_messages
 		render json: sync_json
 	end
 

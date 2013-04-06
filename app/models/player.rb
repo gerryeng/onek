@@ -17,6 +17,35 @@ class Player < ActiveRecord::Base
   def is_player_turn?
     game.turn == id
   end
+  ###############
+  # Discard/Destroy Cards
+  ###############
+
+  def discard_random_cards(quantity)
+    # Discard cards from hand
+    info "Discarding #{quantity} cards from hand"
+    ids = hand_card_ids
+    ids.pop(quantity)
+    update_hand_cards(ids)
+    info "Hand cards after discarding: #{hand_card_ids.join(',')}"
+  end
+
+  def destroy_random_cards(quantity)
+      # Discard cards from table
+    info "Discarding #{quantity} cards from table"
+    ids = table_card_ids
+    ids.pop(quantity)
+    update_table_cards(ids)
+    info "Table cards after discarding: #{table_card_ids.join(',')}"
+  end
+
+
+  ###############
+  # Status
+  ###############
+  def is_end_of_turn?
+    hand_cards_ids <= 5
+  end
 
   ###############
   # Hand Cards
@@ -122,5 +151,9 @@ class Player < ActiveRecord::Base
 
   def info(msg)
     Rails.logger.info msg
+  end
+
+  def to_s
+    name
   end
 end
