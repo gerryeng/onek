@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  number_of_players: 1
+  player_1: 1
+  player_2: 1
+  state: MyText
+
+two:
+  number_of_players: 1
+  player_1: 1
+  player_2: 1
+  state: MyText

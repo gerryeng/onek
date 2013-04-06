@@ -1,0 +1,45 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400);
+
+body {
+	font-family: 'Lato', sans-serif;
+}
+
+.main {
+	color: #000;
+	text-align: center;
+	width: auto;
+	display: inline-block;
+}
+
+h1 {
+	font-weight: 300;
+	margin: 0px;
+	font-size: 70px;
+}
+
+.call-to-action {
+	padding: 20px;
+	background-color: #eee;
+	text-align: left;
+	margin-left: 30px;
+	font-size: 20px;
+	border-radius: 10px;
+	box-shadow: 1px 1px 1px #666;
+	border: 1px solid #ccc;
+
+	input.email {
+		width: 400px;
+		padding: 10px;
+		font-size: 15px;
+		display: inline-block;
+		margin: none;
+	}
+
+	.ok-btn {
+		padding: 10px;
+		font-size: 14px;
+		border: 1px solid #ccc;
+		background-color: #fff;
+		display: inline-block;
+	}
+}

@@ -1,1 +1,12 @@
-%h1 Welcome to One K
+%center
+	.main
+		%br/
+		= image_tag "http://memecrunch.com/meme/ISE9/pay-card-game-like-a-boss/image.png", width: 500
+		%br/
+		%br/
+		= form_tag cta_path do 
+			.call-to-action
+				Be the first to know when we launch
+				%br/
+				= text_field_tag :email, nil, placeholder: 'Your email address', class: 'email'
+				= submit_tag 'Submit', class: 'ok-btn'
