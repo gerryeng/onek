@@ -3,7 +3,7 @@ ruby '1.9.3'
 gem 'rails', '3.2.11'
 
 gem 'pg'
-gem 'thin'
+gem 'unicorn'
 
 group :assets do
 	gem 'sass-rails',   '~> 3.2.3'
@@ -27,6 +27,7 @@ group :development do
 	gem 'guard-livereload'
 	gem 'rb-fsevent', '~> 0.9'
 	gem 'sqlite3'
+	gem 'thin'
 end
 
 gem 'jquery-rails'
